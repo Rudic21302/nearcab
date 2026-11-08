@@ -1,0 +1,45 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "nearcab/call",
+  "title": "NearCab Call (F1)",
+  "category": "theme",
+  "description": "Stop 1: a big statement left, a washed card right (label, heading, lead, body) with the painted phone.",
+  "textdomain": "nearcab",
+  "parent": [
+    "nearcab/ride"
+  ],
+  "attributes": {
+    "frameLabel": {
+      "type": "string",
+      "default": "Stop 1, the call"
+    },
+    "statementLines": {
+      "type": "string",
+      "default": "A phone\nrings."
+    },
+    "label": {
+      "type": "string",
+      "default": "Stop 1 · The call"
+    },
+    "heading": {
+      "type": "string",
+      "default": "24 cabs are free."
+    },
+    "lead": {
+      "type": "string",
+      "default": "The dispatcher has seconds to pick one."
+    },
+    "body": {
+      "type": "string",
+      "default": "The usual answer is a radio round: ask who is close, wait, guess. The wrong guess costs a cab driving empty across town and a caller watching the clock."
+    }
+  },
+  "supports": {
+    "html": false,
+    "reusable": false
+  },
+  "editorScript": "nearcab-call-editor",
+  "style": "nearcab-call-style",
+  "render": "file:./render.php"
+}

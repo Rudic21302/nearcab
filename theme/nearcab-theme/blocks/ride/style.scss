@@ -1,0 +1,700 @@
+// NearCab ride (render.php): the shared NearCab look (tokens, type, buttons, washes), the pinned stage, the street
+// camera with the cab and the sky camera with the map. Frame layouts live in each frame block's style.scss.
+// Ported 1:1 from truth/design/ride-test/index.html: keep every keyframe percentage, clamp() and
+// min()/max() safety value identical. The street keyframes are wide-screen safe; never "simplify" them.
+// F0 pickup 0-5% · F1 call 12-20% · F2 above the city 31-56% (map animates inside) · F3 garage 66-72% · F4 door 80-86% · F5 end 100%
+
+$paper: var(--wp--preset--color--nearcab-paper);
+$ink: var(--wp--preset--color--nearcab-ink);
+$cab: var(--wp--preset--color--nearcab-cab);
+$fx: --wp--custom--nearcab--;
+
+@property --drive {
+	syntax: "<number>";
+	inherits: false;
+	initial-value: 0;
+}
+
+// The page around the ride (no site header/footer on this template) is the same paper.
+body:has(.nearcab) {
+	background: $paper;
+}
+
+.nearcab {
+	--paper: #{$paper};
+	--ink: #{$ink};
+	--soft: var(--wp--preset--color--nearcab-soft);
+	--cab: #{$cab};
+	--cab-deep: var(--wp--preset--color--nearcab-cab-deep);
+	--d: var(--wp--preset--font-family--nearcab-display);
+	--t: var(--wp--preset--font-family--nearcab-text);
+	--m: 20px;
+	--g: 12px;
+	--band: 30svh;
+	--bh: calc(var(--band) * .74);
+	--anchor: 78vw;
+	--top: 76px;
+	--s-display: clamp(40px, min(9vw, 14svh), 140px);
+	--s-head: clamp(28px, min(1rem + 2.2vw, 8svh), 56px);
+	--s-lead: clamp(19px, 1.05rem + .35vw, 24px);
+	--s-body: clamp(16px, .95rem + .1vw, 18px);
+	--s-cap: 14px;
+	--eo: cubic-bezier(.22, 1, .36, 1);
+
+	background: var(--paper);
+	color: var(--ink);
+	font: 400 var(--s-body)/1.55 var(--t);
+	overflow-x: clip;
+	overflow-wrap: normal;
+
+	&,
+	* {
+		box-sizing: border-box;
+	}
+
+	img {
+		display: block;
+		max-width: 100%;
+		height: auto;
+	}
+
+	h1,
+	h2,
+	h3 {
+		font-family: var(--d);
+		font-weight: 700;
+		margin: 0;
+		letter-spacing: -.035em;
+		hyphens: manual;
+	}
+
+	// Links are underlined as in the demo (the site's global link style removes it); buttons and the brand opt out.
+	a {
+		color: var(--ink);
+		text-decoration: underline;
+	}
+
+	p {
+		margin: 0;
+	}
+
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		column-gap: var(--g);
+		padding: 0 var(--m);
+	}
+
+	.label {
+		font: 700 var(--s-cap)/1.43 var(--d);
+	}
+
+	.rule {
+		border-top: 4px solid var(--ink);
+		padding-top: 8px;
+	}
+
+	// Inside a card: the gap under a label rule (demo inline margin-top:16px).
+	.after-label {
+		margin-top: 16px;
+	}
+
+	.display {
+		font-family: var(--d);
+		font-weight: 700;
+		font-size: var(--s-display);
+		line-height: .9;
+		letter-spacing: -.04em;
+	}
+
+	.head {
+		font-size: var(--s-head);
+		line-height: 1;
+	}
+
+	.lead {
+		font-size: var(--s-lead);
+		line-height: 1.4;
+		max-width: 30ch;
+	}
+
+	.body {
+		max-width: 46ch;
+	}
+
+	// Every yellow button is a painted yellow blot.
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 56px;
+		padding: 0 40px;
+		background: url(../../assets/nearcab/wash-cab.webp) center/100% 100% no-repeat;
+		color: var(--ink);
+		font: 700 16px var(--d);
+		text-decoration: none;
+		transition: transform 140ms var(--eo), background-color 180ms ease;
+	}
+
+	.btn:hover {
+		filter: saturate(1.25);
+	}
+
+	.nav .btn {
+		min-height: 48px;
+		padding: 0 26px;
+		font-size: 15px;
+		white-space: nowrap;
+	}
+
+	.btn:active {
+		transform: scale(.97);
+	}
+
+	.nav {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		z-index: 20;
+		background: url(../../assets/nearcab/wash-header.webp) center/100% 100% no-repeat;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 24px;
+		padding: 14px var(--m);
+	}
+
+	.brand {
+		font: 700 20px var(--d);
+		letter-spacing: .02em;
+		text-transform: uppercase;
+		text-decoration: none;
+	}
+
+	// watercolour wash behind a text block: a painted stain, never a box
+	.wash {
+		position: relative;
+		isolation: isolate;
+		padding: 28px 24px 32px;
+	}
+
+	.wash::before {
+		content: "";
+		position: absolute;
+		inset: -6% -8% -16%;
+		z-index: -1;
+		background: center/100% 100% no-repeat;
+		opacity: .62;
+		pointer-events: none;
+	}
+
+	.wash.blush::before {
+		background-image: url(../../assets/nearcab/wash-blush.webp);
+	}
+
+	.wash.river::before {
+		background-image: url(../../assets/nearcab/wash-river.webp);
+		opacity: .42;
+	}
+
+	.drop {
+		position: absolute;
+		width: clamp(36px, 4vw, 64px);
+		pointer-events: none;
+	}
+
+	// ---- at rest (no scroll timelines / reduced motion): the frames are a normal page ----
+	.ride {
+		position: relative;
+	}
+
+	.stage {
+		position: relative;
+	}
+
+	.frame {
+		position: relative;
+		padding: calc(var(--top) + 24px) 0 72px;
+	}
+
+	.band,
+	.mapstage {
+		display: none;
+	}
+
+	.map {
+		position: relative;
+		width: 100%;
+		aspect-ratio: 1347/1400;
+	}
+
+	.map > img {
+		width: 100%;
+		height: 100%;
+	}
+
+	.map svg {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	.zone {
+		opacity: .55;
+		mix-blend-mode: multiply;
+	}
+
+	$zone-fills: sun, rose, cab, river, sand, sage, rose, sun, river, sand, blush;
+	@for $n from 1 through length($zone-fills) {
+		.z#{$n} {
+			fill: var(#{$fx}zone-#{nth($zone-fills, $n)});
+		}
+	}
+
+	.route {
+		fill: none;
+		stroke: var(--ink);
+		stroke-width: .6;
+		stroke-linecap: round;
+	}
+
+	.ping {
+		fill: none;
+		stroke: var(#{$fx}ping);
+		stroke-width: .6;
+	}
+
+	.dot {
+		fill: var(--cab);
+		stroke: var(--ink);
+		stroke-width: .5;
+	}
+
+	@media (min-width: 768px) {
+		--m: 28px;
+		--g: 24px;
+		--band: min(38svh, 30vw);
+		--anchor: 62vw;
+		--top: 92px;
+
+		.grid {
+			grid-template-columns: repeat(12, minmax(0, 1fr));
+		}
+
+		.wash {
+			padding: 36px 40px 40px;
+		}
+	}
+
+	// ---- the ride ----
+	@supports (animation-timeline: view()) and (animation-range: contain 0% contain 100%) {
+		@media (prefers-reduced-motion: no-preference) {
+			.ride {
+				height: 820vh;
+				view-timeline-name: --ride;
+				background: var(--wp--preset--color--nearcab-road); // shows for a moment if the stage lags the phone's URL bar
+			}
+
+			.stage {
+				position: sticky;
+				top: 0;
+				height: 100vh;
+				height: 100dvh; // follows the phone's URL bar, so the street stays on the screen's bottom edge
+				overflow: clip;
+				animation: stagebg linear both;
+				animation-timeline: --ride;
+				animation-range: contain 0% contain 100%;
+			}
+
+			@keyframes stagebg {
+				0%, 77% { background-color: var(--paper); }
+				80%, 86% { background-color: var(--cab); }
+				89%, 100% { background-color: var(--paper); }
+			}
+
+			.frame {
+				position: absolute;
+				inset: calc(var(--top) - 12px) 0 auto 0;
+				height: calc(100svh - var(--band) - var(--top) - 4px);
+				overflow: clip;
+				padding: 12px 0 0;
+				opacity: 0;
+				pointer-events: none;
+				animation: linear both;
+				animation-timeline: --ride;
+				animation-range: contain 0% contain 100%;
+			}
+
+			// links and fields take clicks; a frame that has faded out is also visibility:hidden in its keyframes, so its
+			// controls can't catch clicks (or keyboard focus) meant for the frame on screen
+			.frame a,
+			.frame input,
+			.frame label,
+			.frame button {
+				pointer-events: auto;
+			}
+
+			// the washes bloom as their frame arrives (names per frame block)
+			.wash::before {
+				transform-origin: 30% 50%;
+				animation: linear both;
+				animation-timeline: --ride;
+				animation-range: contain 0% contain 100%;
+			}
+
+			// reading inside a frame: if the copy is taller than the reading area, it scrolls up during the frame's
+			// hold (the cab waits); the per-frame keyframes live in the frame blocks
+			.frame > .grid {
+				animation: linear both;
+				animation-timeline: --ride;
+				animation-range: contain 0% contain 100%;
+			}
+
+			// street camera
+			.band {
+				display: block;
+				position: absolute;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				height: var(--band);
+				overflow: hidden;
+				transition: transform 1s cubic-bezier(.76, 0, .24, 1), opacity .8s ease;
+			}
+
+			// the lift: when the page enters the sky state, the street sinks out of view and the map rises in; it plays
+			// in time, not by scroll
+			.is-sky .band {
+				transform: translateY(100%);
+				opacity: 0;
+			}
+
+			.world,
+			.near {
+				position: absolute;
+				left: 0;
+				bottom: calc(var(--band) * .14);
+				display: flex;
+				align-items: flex-end;
+				width: max-content;
+				animation: linear both;
+				animation-timeline: --ride;
+				animation-range: contain 0% contain 100%;
+			}
+
+			.world img,
+			.near img {
+				height: var(--bh);
+				width: auto;
+				max-width: none;
+			}
+
+			.world {
+				z-index: 1;
+				animation-name: pan-back;
+			}
+
+			.near {
+				z-index: 2;
+				animation-name: pan-near;
+			}
+
+			.road {
+				position: absolute;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				height: calc(var(--band) * .16);
+				background: var(--wp--preset--color--nearcab-road);
+				z-index: 3;
+			}
+
+			// street position per reading frame = painting heights from the street's start, placed at --anchor; only
+			// grows, even speed per drive
+			@keyframes pan-back {
+				0%, 5% { transform: translateX(min(0px, calc(var(--bh) * -2.97 + var(--anchor)))); }
+				12%, 59% { transform: translateX(min(calc(var(--bh) * -4.370 + var(--anchor)), calc(var(--bh) * -1.4))); }
+				66%, 72% { transform: translateX(calc(var(--bh) * -7.057 + var(--anchor))); }
+				80%, 86% { transform: translateX(calc(var(--bh) * -8.562 + var(--anchor))); }
+				100% { transform: translateX(max(calc(var(--bh) * -11.16 + var(--anchor)), calc(100vw - var(--bh) * 13.5))); }
+			}
+
+			@keyframes pan-near {
+				0%, 5% { transform: translateX(min(0px, calc((var(--bh) * -2.97 + var(--anchor)) * 1.2))); }
+				12%, 59% { transform: translateX(calc(min(calc(var(--bh) * -4.370 + var(--anchor)), calc(var(--bh) * -1.4)) * 1.2)); }
+				66%, 72% { transform: translateX(calc((var(--bh) * -7.057 + var(--anchor)) * 1.2)); }
+				80%, 86% { transform: translateX(calc((var(--bh) * -8.562 + var(--anchor)) * 1.2)); }
+				100% { transform: translateX(max(calc((var(--bh) * -11.16 + var(--anchor)) * 1.2), calc(100vw - var(--bh) * 14.8))); }
+			}
+
+			// the cab: body, two turning wheels, exhaust
+			.cab {
+				position: absolute;
+				left: 6vw;
+				bottom: calc(var(--band) * .03);
+				height: calc(var(--band) * .42);
+				aspect-ratio: 1400/576;
+				z-index: 4;
+				transform-origin: 20% 100%;
+				animation: arrive 1.4s var(--eo) both, ride linear both;
+				animation-timeline: auto, --ride;
+				animation-range: normal, contain 0% contain 100%;
+			}
+
+			.cab .body {
+				position: absolute;
+				inset: 0;
+				width: 100%;
+				height: 100%;
+				max-width: none;
+				animation: engine .9s ease-in-out infinite;
+			}
+
+			.is-moving {
+				--moving: 1;
+			}
+
+			.cab .wheel {
+				filter: blur(calc(var(--drive) * var(--moving, 0) * 2.2px));
+				transition: filter .15s ease;
+				position: absolute;
+				top: 59.9%;
+				width: 12.86%;
+				height: auto;
+				max-width: none;
+				animation: spin linear both;
+				animation-timeline: --ride;
+				animation-range: contain 0% contain 100%;
+			}
+
+			.cab .w1 {
+				left: 19.07%;
+			}
+
+			.cab .w2 {
+				left: 73.71%;
+			}
+
+			.puff {
+				position: absolute;
+				left: -2%;
+				top: 72%;
+				width: 5%;
+				aspect-ratio: 1;
+				border-radius: 50%;
+				background: var(#{$fx}puff);
+				filter: blur(2px);
+				opacity: 0;
+				animation: puff 2.1s ease-out infinite;
+			}
+
+			.lamp {
+				position: absolute;
+				right: -6%;
+				top: 58%;
+				width: 22%;
+				aspect-ratio: 2/1;
+				border-radius: 50%;
+				background: var(#{$fx}lamp);
+				filter: blur(10px);
+				opacity: 0;
+				animation: lamp linear both;
+				animation-timeline: --ride;
+				animation-range: contain 0% contain 100%;
+			}
+
+			@keyframes lamp {
+				0%, 88% { opacity: 0; }
+				96%, 100% { opacity: .85; }
+			}
+
+			.brake {
+				position: absolute;
+				left: 1.5%;
+				top: 56%;
+				width: 5%;
+				aspect-ratio: 1;
+				border-radius: 50%;
+				background: var(#{$fx}brake);
+				filter: blur(4px);
+				opacity: 0;
+				animation: brake linear both;
+				animation-timeline: --ride;
+				animation-range: contain 0% contain 100%;
+			}
+
+			@keyframes brake {
+				0%, 10% { opacity: 0; }
+				11.5%, 13% { opacity: .8; }
+				15%, 63% { opacity: 0; }
+				65.5%, 67% { opacity: .8; }
+				69%, 78% { opacity: 0; }
+				79.5%, 81% { opacity: .8; }
+				83%, 98% { opacity: 0; }
+				99.5%, 100% { opacity: .8; }
+			}
+
+			.puff + .puff {
+				animation-delay: .7s;
+			}
+
+			.puff + .puff + .puff {
+				animation-delay: 1.4s;
+			}
+
+			@keyframes arrive {
+				from { translate: -160% 0; }
+			}
+
+			@keyframes engine {
+				50% { translate: 0 -1.5px; }
+			}
+
+			@keyframes puff {
+				0% { opacity: 0; transform: translate(0, 0) scale(.6); }
+				20% { opacity: .7; }
+				100% { opacity: 0; transform: translate(-180%, -60%) scale(2.2); }
+			}
+
+			// wheels turn only while the street moves, by the distance driven: rotation = distance driven / wheel
+			// circumference (about 646deg per painting height), so the tyre rolls without slipping; the hub blurs while
+			// moving so its bolt pattern cannot strobe into a backwards spin (wagon-wheel effect)
+			@keyframes spin {
+				0%, 5% { rotate: 0deg; --drive: 0; }
+				6% { --drive: 1; }
+				11% { --drive: 1; }
+				12%, 59% { rotate: 904deg; --drive: 0; }
+				60% { --drive: 1; }
+				65% { --drive: 1; }
+				66%, 72% { rotate: 2640deg; --drive: 0; }
+				73% { --drive: 1; }
+				79% { --drive: 1; }
+				80%, 86% { rotate: 3612deg; --drive: 0; }
+				87% { --drive: 1; }
+				99% { --drive: 1; }
+				100% { rotate: 5290deg; --drive: 0; }
+			}
+
+			@keyframes ride {
+				0%, 5% { transform: none; }
+				8% { transform: translateY(-2px); }
+				11.5% { transform: rotate(1.4deg); }
+				12%, 59% { transform: none; }
+				62% { transform: translateY(-2px); }
+				65.5% { transform: rotate(1.4deg); }
+				66%, 72% { transform: none; }
+				76% { transform: translateY(-2px); }
+				79.5% { transform: rotate(1.4deg); }
+				80%, 86% { transform: none; }
+				93% { transform: translateY(-2px); }
+				99.5% { transform: rotate(1.4deg); }
+				100% { transform: none; }
+			}
+
+			// sky camera: the map
+			.mapstage {
+				display: block;
+				position: absolute;
+				inset: 0;
+				pointer-events: none;
+			}
+
+			.frame {
+				z-index: 6;
+			}
+
+			.mapstage .map {
+				position: absolute;
+				opacity: 0;
+				transform: translateY(8vh);
+				transition: transform 1s cubic-bezier(.22, 1, .36, 1) .35s, opacity .7s ease .35s;
+				transform-origin: 51.9% 47.3%;
+				width: min(92vw, 46svh);
+				left: 50%;
+				margin-left: calc(min(92vw, 46svh) / -2);
+				top: var(--top);
+			}
+
+			.is-sky .mapstage .map {
+				opacity: 1;
+				transform: none;
+			}
+
+			.stage:not(.is-sky) .mapstage .map {
+				transition-delay: 0s;
+			}
+
+			.mapstage .zone {
+				opacity: 0;
+				animation: linear both;
+				animation-timeline: --ride;
+				animation-range: contain 0% contain 100%;
+			}
+
+			// zones bloom one by one: zone n from 28% + (n-1) * .7%, over 2%
+			@for $n from 1 through 11 {
+				$from: 28% + ($n - 1) * .7%;
+				.mapstage .z#{$n} {
+					animation-name: b#{$n};
+				}
+				@keyframes b#{$n} {
+					0%, #{$from} { opacity: 0; }
+					#{$from + 2%}, 100% { opacity: .55; }
+				}
+			}
+
+			.mapstage .ping {
+				animation: pingk linear both;
+				animation-timeline: --ride;
+				animation-range: contain 0% contain 100%;
+			}
+
+			@keyframes pingk {
+				0%, 37% { opacity: 0; }
+				39%, 100% { opacity: 1; }
+			}
+
+			.mapstage .route {
+				stroke-dasharray: 20;
+				animation: routek linear both;
+				animation-timeline: --ride;
+				animation-range: contain 0% contain 100%;
+			}
+
+			@keyframes routek {
+				0%, 44% { stroke-dashoffset: 20; }
+				47%, 100% { stroke-dashoffset: 0; }
+			}
+
+			.mapstage .dot {
+				animation: dotk linear both;
+				animation-timeline: --ride;
+				animation-range: contain 0% contain 100%;
+			}
+
+			@keyframes dotk {
+				0%, 47% { transform: none; }
+				54%, 100% { transform: translate(-11.4px, 8.3px); }
+			}
+
+			@media (min-width: 768px) {
+				.mapstage .map {
+					width: min(46vw, calc(100svh - var(--top) - 32px));
+					left: auto;
+					right: var(--m);
+					margin-left: 0;
+					top: calc(var(--top) - 16px);
+				}
+			}
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		* {
+			animation: none !important;
+			transition: none !important;
+		}
+	}
+}

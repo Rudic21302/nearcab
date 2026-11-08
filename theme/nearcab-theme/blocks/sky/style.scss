@@ -1,0 +1,174 @@
+// NearCab Sky (F2): the washed card beside the map. Shown by the sky state (is-sky, view.js), not by scroll;
+// parts A and B and the stations follow the ride timeline (41-54%).
+// Ported 1:1 from truth/design/ride-test/index.html; shared look and the stage are in the ride block.
+// Frame selectors are .frame.fN so they beat the ride's .frame rules whatever order the block styles load in.
+
+.nearcab {
+	.frame.f2 .card {
+		grid-column: 1/-1;
+	}
+
+	.parts .lead {
+		margin-top: 14px;
+	}
+
+	.parts .body {
+		margin-top: 12px;
+	}
+
+	.stations {
+		list-style: none;
+		padding: 0;
+		margin: 20px 0 0;
+		display: grid;
+		gap: 10px;
+	}
+
+	.stations li {
+		display: grid;
+		grid-template-columns: 6.2em 1fr;
+		gap: 12px;
+		align-items: baseline;
+	}
+
+	.stations b {
+		font: 700 var(--s-lead)/1.1 var(--d);
+		letter-spacing: -.02em;
+	}
+
+	.restmap {
+		grid-column: 1/-1;
+		margin-top: 24px;
+		max-width: 520px;
+	}
+
+	@media (min-width: 768px) {
+		.frame.f2 .card {
+			grid-column: 1/6;
+			align-self: start;
+		}
+	}
+
+	@supports (animation-timeline: view()) and (animation-range: contain 0% contain 100%) {
+		@media (prefers-reduced-motion: no-preference) {
+			.restmap {
+				display: none;
+			}
+
+			.frame.f2 {
+				animation: none;
+				opacity: 0;
+				transform: translateY(24px);
+				transition: opacity .6s ease, transform .8s cubic-bezier(.22, 1, .36, 1);
+				top: calc(var(--top) + min(92vw, 46svh) + 8px);
+				height: calc(100svh - var(--top) - min(92vw, 46svh) - 8px);
+				padding-top: 0;
+			}
+
+			.is-sky .frame.f2 {
+				opacity: 1;
+				transform: none;
+				transition-delay: .7s;
+			}
+
+			.frame.f2 .wash::before {
+				animation-name: w2;
+			}
+
+			@keyframes w2 {
+				0%, 27% { transform: scale(.6); opacity: 0; }
+				32%, 100% { transform: none; opacity: .42; }
+			}
+
+			.frame.f2 > .grid {
+				animation-name: r2;
+			}
+
+			@keyframes r2 {
+				0%, 44% { transform: none; }
+				55%, 100% { transform: translateY(calc(var(--over, 0px) * -1)); }
+			}
+
+			.parts {
+				display: grid;
+			}
+
+			.parts > .part {
+				grid-area: 1/1;
+			}
+
+			.pa,
+			.pb {
+				animation: linear both;
+				animation-timeline: --ride;
+				animation-range: contain 0% contain 100%;
+			}
+
+			.pa {
+				animation-name: pa;
+			}
+
+			@keyframes pa {
+				0%, 41% { opacity: 1; }
+				43%, 100% { opacity: 0; }
+			}
+
+			.pb {
+				animation-name: pb;
+			}
+
+			@keyframes pb {
+				0%, 42% { opacity: 0; transform: translateY(16px); }
+				44%, 100% { opacity: 1; transform: none; }
+			}
+
+			.stations li {
+				opacity: .3;
+				animation: linear both;
+				animation-timeline: --ride;
+				animation-range: contain 0% contain 100%;
+			}
+
+			.stations .st1 { animation-name: s1; }
+			@keyframes s1 { 0%, 44% { opacity: .3; } 45%, 100% { opacity: 1; } }
+			.stations .st2 { animation-name: s2; }
+			@keyframes s2 { 0%, 46% { opacity: .3; } 47%, 100% { opacity: 1; } }
+			.stations .st3 { animation-name: s3; }
+			@keyframes s3 { 0%, 48% { opacity: .3; } 49%, 100% { opacity: 1; } }
+			.stations .st4 { animation-name: s4; }
+			@keyframes s4 { 0%, 50% { opacity: .3; } 54%, 100% { opacity: 1; } }
+
+			.frame.f2 .body {
+				display: none;
+			}
+
+			.frame.f2 .wash {
+				padding: 16px 0 0;
+			}
+
+			.frame.f2 .wash::before {
+				display: none;
+			}
+
+			@media (min-width: 768px) {
+				.frame.f2 {
+					top: calc(var(--top) - 12px);
+					height: calc(100svh - var(--top) + 12px);
+					padding-top: 12px;
+				}
+
+				.frame.f2 .body {
+					display: block;
+				}
+
+				.frame.f2 .wash {
+					padding: 36px 40px 40px;
+				}
+
+				.frame.f2 .wash::before {
+					display: block;
+				}
+			}
+		}
+	}
+}

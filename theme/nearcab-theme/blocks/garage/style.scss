@@ -1,0 +1,115 @@
+// NearCab Garage (F3): heading + lead left, the index right (items slide in one by one). Visible 66-72%.
+// Ported 1:1 from truth/design/ride-test/index.html; shared look and the stage are in the ride block.
+// Frame selectors are .frame.fN so they beat the ride's .frame rules whatever order the block styles load in.
+
+.nearcab {
+	.frame.f3 .rule {
+		grid-column: 1/-1;
+		margin-bottom: 20px;
+	}
+
+	.frame.f3 h2 {
+		grid-column: 1/-1;
+	}
+
+	.frame.f3 .lead {
+		grid-column: 1/-1;
+		margin-top: 14px;
+	}
+
+	.index {
+		grid-column: 1/-1;
+		list-style: none;
+		padding: 0;
+		margin: 28px 0 0;
+		display: grid;
+		gap: 18px;
+	}
+
+	.index li {
+		position: relative;
+	}
+
+	.index h3 {
+		font-size: clamp(24px, 1rem + 1.6vw, 40px);
+		line-height: 1;
+	}
+
+	.index p {
+		margin-top: 6px;
+		max-width: 40ch;
+	}
+
+	.index .later {
+		color: var(--soft);
+	}
+
+	.index .later .drop {
+		right: 4%;
+		top: -6px;
+	}
+
+	.more {
+		grid-column: 1/-1;
+		margin-top: 20px;
+	}
+
+	@media (min-width: 768px) {
+		.frame.f3 h2,
+		.frame.f3 .lead {
+			grid-column: 1/6;
+		}
+
+		.frame.f3 .index {
+			grid-column: 7/-1;
+			grid-row: 2/5;
+			margin-top: 0;
+			gap: 22px;
+		}
+
+		.frame.f3 .more {
+			grid-column: 1/6;
+		}
+	}
+
+	@supports (animation-timeline: view()) and (animation-range: contain 0% contain 100%) {
+		@media (prefers-reduced-motion: no-preference) {
+			.frame.f3 {
+				animation-name: k3;
+			}
+
+			@keyframes k3 {
+				0%, 63% { opacity: 0; transform: translateY(24px); visibility: hidden; }
+				66%, 72% { opacity: 1; transform: none; visibility: visible; }
+				75%, 100% { opacity: 0; transform: translateY(-24px); visibility: hidden; }
+			}
+
+			.frame.f3 > .grid {
+				animation-name: r3;
+			}
+
+			@keyframes r3 {
+				0%, 66.5% { transform: none; }
+				71.5%, 100% { transform: translateY(calc(var(--over, 0px) * -1)); }
+			}
+
+			.index li {
+				animation: linear both;
+				animation-timeline: --ride;
+				animation-range: contain 0% contain 100%;
+			}
+
+			// item n slides in from 63.5% + (n-1)%, over 2%
+			@for $n from 1 through 3 {
+				$from: 62.5% + $n * 1%;
+				.index li:nth-child(#{$n}) {
+					animation-name: i#{$n};
+				}
+				@keyframes i#{$n} {
+					0%, #{$from} { opacity: 0; transform: translateX(24px); }
+					#{$from + 2%}, 100% { opacity: 1; transform: none; }
+				}
+			}
+		}
+	}
+}

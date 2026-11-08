@@ -1,0 +1,74 @@
+// NearCab End (F5): the giant link home, body, fine print. Visible 97-100%.
+// Ported 1:1 from truth/design/ride-test/index.html; shared look and the stage are in the ride block.
+// Frame selectors are .frame.fN so they beat the ride's .frame rules whatever order the block styles load in.
+
+.nearcab {
+	.frame.f5 .label.rule {
+		grid-column: 1/-1;
+		margin-bottom: 12px;
+	}
+
+	.big {
+		grid-column: 1/-1;
+		display: block;
+		text-decoration: none;
+		font: 700 clamp(44px, 10.4vw, 160px)/.9 var(--d);
+		letter-spacing: -.045em;
+	}
+
+	.frame.f5 .body {
+		grid-column: 1/-1;
+		margin-top: 20px;
+	}
+
+	.frame.f5 .card {
+		grid-column: 1/-1;
+		margin-top: 24px;
+	}
+
+	.fine {
+		display: grid;
+		gap: 6px;
+	}
+
+	@media (min-width: 768px) {
+		.frame.f5 .body {
+			grid-column: 1/7;
+		}
+
+		.frame.f5 .card {
+			grid-column: 8/-1;
+		}
+	}
+
+	@supports (animation-timeline: view()) and (animation-range: contain 0% contain 100%) {
+		@media (prefers-reduced-motion: no-preference) {
+			.frame.f5 {
+				animation-name: k5;
+			}
+
+			@keyframes k5 {
+				0%, 94% { opacity: 0; transform: translateY(24px); visibility: hidden; }
+				97%, 100% { opacity: 1; transform: none; visibility: visible; }
+			}
+
+			.frame.f5 .wash::before {
+				animation-name: w5;
+			}
+
+			@keyframes w5 {
+				0%, 94% { transform: scale(.6); opacity: 0; }
+				98%, 100% { transform: none; opacity: .62; }
+			}
+
+			.frame.f5 > .grid {
+				animation-name: r5;
+			}
+
+			@keyframes r5 {
+				0%, 97% { transform: none; }
+				99.5%, 100% { transform: translateY(calc(var(--over, 0px) * -1)); }
+			}
+		}
+	}
+}

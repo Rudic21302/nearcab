@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NearCab, the ride</title>
+<style>
+@font-face{font-family:'Libre Franklin';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/libre-franklin-700-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Libre Franklin';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/libre-franklin-700.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Literata';font-style:italic;font-weight:400;font-display:swap;src:url(fonts/literata-italic-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Literata';font-style:italic;font-weight:400;font-display:swap;src:url(fonts/literata-italic.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Literata';font-style:normal;font-weight:400 600;font-display:swap;src:url(fonts/literata-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Literata';font-style:normal;font-weight:400 600;font-display:swap;src:url(fonts/literata.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+</style>
+<style>
+/* NearCab ride v8: one pinned stage, one scroll-driven animation; the reading frames are its keyframes.
+   F0 pickup 0-5% · F1 call 12-20% · F2 above the city 31-56% (map animates inside) · F3 garage 66-72% · F4 door 80-86% · F5 end 100% */
+:root{--paper:#FDFAF7;--ink:#1C1A19;--soft:#55524F;--cab:#FCCF5D;--cab-deep:#E2A93B;
+ --d:'Libre Franklin',Arial,sans-serif;--t:'Literata',Georgia,serif;
+ --m:20px;--g:12px;--band:30svh;--bh:calc(var(--band) * .74);--anchor:78vw;--top:76px;
+ --s-display:clamp(40px,min(9vw,14svh),140px);--s-head:clamp(28px,min(1rem + 2.2vw,8svh),56px);--s-lead:clamp(19px,1.05rem + .35vw,24px);--s-body:clamp(16px,.95rem + .1vw,18px);--s-cap:14px;
+ --eo:cubic-bezier(.22,1,.36,1)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 var(--s-body)/1.55 var(--t);overflow-x:clip}
+img{display:block;max-width:100%;height:auto}
+h1,h2,h3{font-family:var(--d);font-weight:700;margin:0;letter-spacing:-.035em}
+a{color:var(--ink)}
+p{margin:0}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:var(--g);padding:0 var(--m)}
+.label{font:700 var(--s-cap)/1.43 var(--d)}
+.rule{border-top:4px solid var(--ink);padding-top:8px}
+.display{font-family:var(--d);font-weight:700;font-size:var(--s-display);line-height:.9;letter-spacing:-.04em}
+.head{font-size:var(--s-head);line-height:1}
+.lead{font-size:var(--s-lead);line-height:1.4;max-width:30ch}
+.body{max-width:46ch}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:0 40px;background:url(img/wash-cab.webp?v=2) center/100% 100% no-repeat;color:var(--ink);font:700 16px var(--d);text-decoration:none;transition:transform 140ms var(--eo),background-color 180ms ease}
+.btn:hover{filter:saturate(1.25)}
+.nav .btn{min-height:48px;padding:0 26px;font-size:15px;white-space:nowrap}
+.btn:active{transform:scale(.97)}
+.nav{position:fixed;top:0;left:0;right:0;z-index:20;background:url(img/wash-header.webp?v=2) center/100% 100% no-repeat;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:14px var(--m)}
+.brand{font:700 20px var(--d);letter-spacing:.02em;text-transform:uppercase;text-decoration:none}
+.links{display:none;gap:32px;font:700 14px var(--d)}
+.links a{text-decoration:none}
+
+/* watercolour wash behind a text block: a painted stain, never a box */
+.wash{position:relative;isolation:isolate;padding:28px 24px 32px}
+.wash::before{content:"";position:absolute;inset:-6% -8% -16%;z-index:-1;background:center/100% 100% no-repeat;opacity:.62;pointer-events:none}
+.wash.blush::before{background-image:url(img/wash-blush.webp)}
+.wash.river::before{background-image:url(img/wash-river.webp);opacity:.42}
+.drop{position:absolute;width:clamp(36px,4vw,64px);pointer-events:none}
+
+/* ---- at rest (no scroll timelines / reduced motion): the frames are a normal page ---- */
+.ride{position:relative}
+.stage{position:relative}
+.frame{position:relative;padding:calc(var(--top) + 24px) 0 72px}
+.band,.mapstage{display:none}
+
+.f0 h1{grid-column:1/-1;text-transform:uppercase}
+.cabword{display:inline-block;height:.74em;width:auto;max-width:none;vertical-align:-.03em;margin-right:.08em}
+.f0 .lead{grid-column:1/-1;margin-top:28px}
+.f0 .act{grid-column:1/-1;margin-top:24px}
+.f1 .display{grid-column:1/-1}
+.f1 .card{grid-column:1/-1;margin-top:28px}
+.f1 .card .lead{margin-top:12px}
+.f1 .card .body{margin-top:12px}
+.f1 .phone{display:none}
+.f2 .card{grid-column:1/-1}
+.parts .lead{margin-top:14px}
+.parts .body{margin-top:12px}
+.stations{list-style:none;padding:0;margin:20px 0 0;display:grid;gap:10px}
+.stations li{display:grid;grid-template-columns:6.2em 1fr;gap:12px;align-items:baseline}
+.stations b{font:700 var(--s-lead)/1.1 var(--d);letter-spacing:-.02em}
+.restmap{grid-column:1/-1;margin-top:24px;max-width:520px}
+.f3 .rule{grid-column:1/-1;margin-bottom:20px}
+.f3 h2{grid-column:1/-1}
+.f3 .lead{grid-column:1/-1;margin-top:14px}
+.index{grid-column:1/-1;list-style:none;padding:0;margin:28px 0 0;display:grid;gap:18px}
+.index li{position:relative}
+.index h3{font-size:clamp(24px,1rem + 1.6vw,40px);line-height:1}
+.index p{margin-top:6px;max-width:40ch}
+.index .later{color:var(--soft)}
+.index .later .drop{right:4%;top:-6px}
+.more{grid-column:1/-1;margin-top:20px}
+.f4{background:var(--cab)}
+.f4 h2{grid-column:1/-1}
+.f4 .lead{grid-column:1/-1;margin-top:10px}
+.form{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;max-width:640px}
+.form label{position:absolute;left:-9999px}
+.form input{flex:1 1 160px;min-width:0;min-height:60px;border:0;border-radius:0;background:var(--paper);color:var(--ink);padding:0 18px;font:400 19px var(--t)}
+.form input::placeholder{color:#7C716B}
+.form button{min-height:60px;padding:0 30px;border:0;border-radius:0;background:var(--ink);color:var(--paper);font:700 18px var(--d);cursor:pointer;transition:transform 140ms var(--eo)}
+.form button:active{transform:scale(.97)}
+.note{grid-column:1/-1;margin-top:16px;max-width:52ch;font-size:15px}
+.consent{grid-column:1/-1;display:flex;gap:12px;align-items:flex-start;margin-top:12px;max-width:560px;padding:18px 22px;font-size:15px;line-height:1.45;cursor:pointer}
+.consent input{flex:0 0 auto;width:22px;height:22px;margin:0;accent-color:var(--ink)}
+.wash.cabwash::before{background-image:url(img/wash-blush.webp);opacity:.55}
+.f5 .label.rule{grid-column:1/-1;margin-bottom:12px}
+.big{grid-column:1/-1;display:block;text-decoration:none;font:700 clamp(44px,10.4vw,160px)/.9 var(--d);letter-spacing:-.045em}
+.f5 .body{grid-column:1/-1;margin-top:20px}
+.f5 .card{grid-column:1/-1;margin-top:24px}
+.fine{display:grid;gap:6px}
+
+.map{position:relative;width:100%;aspect-ratio:1347/1400}
+.map>img{width:100%;height:100%}
+.map svg{position:absolute;inset:0;width:100%;height:100%}
+.zone{opacity:.55;mix-blend-mode:multiply}
+.route{fill:none;stroke:var(--ink);stroke-width:.6;stroke-linecap:round}
+.ping{fill:none;stroke:#BE4A4B;stroke-width:.6}
+.dot{fill:var(--cab);stroke:var(--ink);stroke-width:.5}
+
+@media (min-width:768px){
+:root{--m:28px;--g:24px;--band:min(38svh,30vw);--anchor:62vw;--top:92px}
+.grid{grid-template-columns:repeat(12,minmax(0,1fr))}
+.links{display:flex}
+.wash{padding:36px 40px 40px}
+.f0 .lead{grid-column:1/6}
+.f0 .act{grid-column:7/-1;align-self:end}
+.f1 .display{grid-column:1/8;align-self:start}
+.f1 .card{grid-column:8/-1;margin-top:0;align-self:start}
+.f1 .phone{display:block;position:absolute;width:clamp(100px,8.5vw,150px);right:2%;bottom:-18%;rotate:8deg}
+.f2 .card{grid-column:1/6;align-self:start}
+.f3 h2{grid-column:1/6}
+.f3 .lead{grid-column:1/6}
+.f3 .index{grid-column:7/-1;grid-row:2/5;margin-top:0;gap:22px}
+.f3 .more{grid-column:1/6}
+.f4 h2{grid-column:1/10}
+.f4 .lead{grid-column:1/6;margin-top:18px}
+.form{grid-column:1/7;margin-top:28px}
+.consent{grid-column:1/7;margin-top:20px}
+.note{grid-column:8/-1;grid-row:3/5;align-self:end}
+.f5 .body{grid-column:1/7}
+.f5 .card{grid-column:8/-1}
+}
+
+/* ---- the ride ---- */
+@supports (animation-timeline:view()) and (animation-range:contain 0% contain 100%){
+@media (prefers-reduced-motion:no-preference){
+.ride{height:820vh;view-timeline-name:--ride;background:#EFE9E2}
+.stage{position:sticky;top:0;height:100vh;height:100dvh;overflow:clip;animation:stagebg linear both;animation-timeline:--ride;animation-range:contain 0% contain 100%}
+@keyframes stagebg{0%,77%{background-color:var(--paper)}80%,86%{background-color:var(--cab)}89%,100%{background-color:var(--paper)}}
+.frame{position:absolute;inset:calc(var(--top) - 12px) 0 auto 0;height:calc(100svh - var(--band) - var(--top) - 4px);overflow:clip;padding:12px 0 0;opacity:0;pointer-events:none;animation:linear both;animation-timeline:--ride;animation-range:contain 0% contain 100%}
+.frame a,.frame input,.frame label,.frame button{pointer-events:auto}
+.f4{background:transparent}
+.restmap{display:none}
+.f0{opacity:1;animation-name:k0}@keyframes k0{0%,5%{opacity:1;transform:none}8%,100%{opacity:0;transform:translateY(-24px)}}
+.f1{animation-name:k1}@keyframes k1{0%,10%{opacity:0;transform:translateY(24px)}12.5%,20%{opacity:1;transform:none}23%,100%{opacity:0;transform:translateY(-24px)}}
+.f2{animation:none;opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .8s cubic-bezier(.22,1,.36,1)}
+.is-sky .f2{opacity:1;transform:none;transition-delay:.7s}
+.f3{animation-name:k3}@keyframes k3{0%,63%{opacity:0;transform:translateY(24px)}66%,72%{opacity:1;transform:none}75%,100%{opacity:0;transform:translateY(-24px)}}
+.f4{animation-name:k4}@keyframes k4{0%,77%{opacity:0;transform:translateY(24px)}80%,86%{opacity:1;transform:none}89%,100%{opacity:0;transform:translateY(-24px)}}
+.f5{animation-name:k5}@keyframes k5{0%,94%{opacity:0;transform:translateY(24px)}97%,100%{opacity:1;transform:none}}
+/* the washes bloom as their frame arrives */
+.wash::before{transform-origin:30% 50%;animation:linear both;animation-timeline:--ride;animation-range:contain 0% contain 100%}
+.f1 .wash::before{animation-name:w1}@keyframes w1{0%,10%{transform:scale(.6);opacity:0}14%,100%{transform:none;opacity:.62}}
+.f2 .wash::before{animation-name:w2}@keyframes w2{0%,27%{transform:scale(.6);opacity:0}32%,100%{transform:none;opacity:.42}}
+.f5 .wash::before{animation-name:w5}@keyframes w5{0%,94%{transform:scale(.6);opacity:0}98%,100%{transform:none;opacity:.62}}
+
+/* reading inside a frame: if the copy is taller than the reading area, it scrolls up during the frame's hold (the cab waits) */
+.frame>.grid{animation:linear both;animation-timeline:--ride;animation-range:contain 0% contain 100%}
+.f0>.grid{animation-name:r0}@keyframes r0{0%,.5%{transform:none}4.5%,100%{transform:translateY(calc(var(--over,0px) * -1))}}
+.f1>.grid{animation-name:r1}@keyframes r1{0%,13%{transform:none}19.5%,100%{transform:translateY(calc(var(--over,0px) * -1))}}
+.f2>.grid{animation-name:r2}@keyframes r2{0%,44%{transform:none}55%,100%{transform:translateY(calc(var(--over,0px) * -1))}}
+.f3>.grid{animation-name:r3}@keyframes r3{0%,66.5%{transform:none}71.5%,100%{transform:translateY(calc(var(--over,0px) * -1))}}
+.f4>.grid{animation-name:r4}@keyframes r4{0%,80.5%{transform:none}85.5%,100%{transform:translateY(calc(var(--over,0px) * -1))}}
+.f5>.grid{animation-name:r5}@keyframes r5{0%,97%{transform:none}99.5%,100%{transform:translateY(calc(var(--over,0px) * -1))}}
+.f2{height:calc(100svh - var(--top) + 12px)}
+.parts{display:grid}.parts>.part{grid-area:1/1}
+.pa,.pb{animation:linear both;animation-timeline:--ride;animation-range:contain 0% contain 100%}
+.pa{animation-name:pa}@keyframes pa{0%,41%{opacity:1}43%,100%{opacity:0}}
+.pb{animation-name:pb}@keyframes pb{0%,42%{opacity:0;transform:translateY(16px)}44%,100%{opacity:1;transform:none}}
+.index li{animation:linear both;animation-timeline:--ride;animation-range:contain 0% contain 100%}
+.index li:nth-child(1){animation-name:i1}@keyframes i1{0%,63.5%{opacity:0;transform:translateX(24px)}65.5%,100%{opacity:1;transform:none}}
+.index li:nth-child(2){animation-name:i2}@keyframes i2{0%,64.5%{opacity:0;transform:translateX(24px)}66.5%,100%{opacity:1;transform:none}}
+.index li:nth-child(3){animation-name:i3}@keyframes i3{0%,65.5%{opacity:0;transform:translateX(24px)}67.5%,100%{opacity:1;transform:none}}
+
+/* street camera */
+.band{display:block;position:absolute;left:0;right:0;bottom:0;height:var(--band);overflow:hidden;transition:transform 1s cubic-bezier(.76,0,.24,1),opacity .8s ease}
+/* the lift: when the page enters the sky state, the street sinks out of view and the map rises in; it plays in time, not by scroll */
+.is-sky .band{transform:translateY(100%);opacity:0}
+.world,.near{position:absolute;left:0;bottom:calc(var(--band) * .14);display:flex;align-items:flex-end;width:max-content;animation:linear both;animation-timeline:--ride;animation-range:contain 0% contain 100%}
+.world img,.near img{height:var(--bh);width:auto;max-width:none}
+.world{z-index:1;animation-name:pan-back}
+.near{z-index:2;animation-name:pan-near}
+.road{position:absolute;left:0;right:0;bottom:0;height:calc(var(--band) * .16);background:#EFE9E2;z-index:3}
+/* street position per reading frame = painting heights from the street's start, placed at --anchor; only grows, even speed per drive */
+@keyframes pan-back{0%,5%{transform:translateX(min(0px, calc(var(--bh) * -2.97 + var(--anchor))))}12%,59%{transform:translateX(min(calc(var(--bh) * -4.370 + var(--anchor)), calc(var(--bh) * -1.4)))}66%,72%{transform:translateX(calc(var(--bh) * -7.057 + var(--anchor)))}80%,86%{transform:translateX(calc(var(--bh) * -8.562 + var(--anchor)))}100%{transform:translateX(max(calc(var(--bh) * -11.16 + var(--anchor)), calc(100vw - var(--bh) * 13.5)))}}
+@keyframes pan-near{0%,5%{transform:translateX(min(0px, calc((var(--bh) * -2.97 + var(--anchor)) * 1.2)))}12%,59%{transform:translateX(calc(min(calc(var(--bh) * -4.370 + var(--anchor)), calc(var(--bh) * -1.4)) * 1.2))}66%,72%{transform:translateX(calc((var(--bh) * -7.057 + var(--anchor)) * 1.2))}80%,86%{transform:translateX(calc((var(--bh) * -8.562 + var(--anchor)) * 1.2))}100%{transform:translateX(max(calc((var(--bh) * -11.16 + var(--anchor)) * 1.2), calc(100vw - var(--bh) * 14.8)))}}
+
+/* the cab: body, two turning wheels, exhaust */
+.cab{position:absolute;left:6vw;bottom:calc(var(--band) * .03);height:calc(var(--band) * .42);aspect-ratio:1400/576;z-index:4;transform-origin:20% 100%;animation:arrive 1.4s var(--eo) both,ride linear both;animation-timeline:auto,--ride;animation-range:normal,contain 0% contain 100%}
+.cab .body{position:absolute;inset:0;width:100%;height:100%;max-width:none;animation:engine .9s ease-in-out infinite}
+@property --drive{syntax:"<number>";inherits:false;initial-value:0}
+.is-moving{--moving:1}
+.cab .wheel{filter:blur(calc(var(--drive) * var(--moving,0) * 2.2px));transition:filter .15s ease;position:absolute;top:59.9%;width:12.86%;height:auto;max-width:none;animation:spin linear both;animation-timeline:--ride;animation-range:contain 0% contain 100%}
+.cab .w1{left:19.07%}.cab .w2{left:73.71%}
+.puff{position:absolute;left:-2%;top:72%;width:5%;aspect-ratio:1;border-radius:50%;background:#D9D4CF;filter:blur(2px);opacity:0;animation:puff 2.1s ease-out infinite}
+.lamp{position:absolute;right:-6%;top:58%;width:22%;aspect-ratio:2/1;border-radius:50%;background:#FFE9A8;filter:blur(10px);opacity:0;animation:lamp linear both;animation-timeline:--ride;animation-range:contain 0% contain 100%}
+@keyframes lamp{0%,88%{opacity:0}96%,100%{opacity:.85}}
+.brake{position:absolute;left:1.5%;top:56%;width:5%;aspect-ratio:1;border-radius:50%;background:#E0483E;filter:blur(4px);opacity:0;animation:brake linear both;animation-timeline:--ride;animation-range:contain 0% contain 100%}
+@keyframes brake{0%,10%{opacity:0}11.5%,13%{opacity:.8}15%,63%{opacity:0}65.5%,67%{opacity:.8}69%,78%{opacity:0}79.5%,81%{opacity:.8}83%,98%{opacity:0}99.5%,100%{opacity:.8}}
+.puff+.puff{animation-delay:.7s}.puff+.puff+.puff{animation-delay:1.4s}
+@keyframes arrive{from{translate:-160% 0}}
+@keyframes engine{50%{translate:0 -1.5px}}
+@keyframes puff{0%{opacity:0;transform:translate(0,0) scale(.6)}20%{opacity:.7}100%{opacity:0;transform:translate(-180%,-60%) scale(2.2)}}
+/* wheels turn only while the street moves, by the distance driven */
+/* rotation = distance driven / wheel circumference (about 646deg per painting height), so the tyre rolls without slipping;
+   the hub blurs while moving so its bolt pattern cannot strobe into a backwards spin (wagon-wheel effect) */
+@keyframes spin{0%,5%{rotate:0deg;--drive:0}6%{--drive:1}11%{--drive:1}12%,59%{rotate:904deg;--drive:0}60%{--drive:1}65%{--drive:1}66%,72%{rotate:2640deg;--drive:0}73%{--drive:1}79%{--drive:1}80%,86%{rotate:3612deg;--drive:0}87%{--drive:1}99%{--drive:1}100%{rotate:5290deg;--drive:0}}
+@keyframes ride{0%,5%{transform:none}8%{transform:translateY(-2px)}11.5%{transform:rotate(1.4deg)}12%,59%{transform:none}62%{transform:translateY(-2px)}65.5%{transform:rotate(1.4deg)}66%,72%{transform:none}76%{transform:translateY(-2px)}79.5%{transform:rotate(1.4deg)}80%,86%{transform:none}93%{transform:translateY(-2px)}99.5%{transform:rotate(1.4deg)}100%{transform:none}}
+
+/* sky camera: the map */
+.mapstage{display:block;position:absolute;inset:0;pointer-events:none}
+.frame{z-index:6}
+.mapstage .map{position:absolute;opacity:0;transform:translateY(8vh);transition:transform 1s cubic-bezier(.22,1,.36,1) .35s,opacity .7s ease .35s;transform-origin:51.9% 47.3%;width:min(92vw,46svh);left:50%;margin-left:calc(min(92vw,46svh) / -2);top:var(--top)}
+.is-sky .mapstage .map{opacity:1;transform:none}
+.stage:not(.is-sky) .mapstage .map{transition-delay:0s}
+.mapstage .zone{opacity:0;animation:linear both;animation-timeline:--ride;animation-range:contain 0% contain 100%}
+.mapstage .z1{animation-name:b1}@keyframes b1{0%,28%{opacity:0}30%,100%{opacity:.55}}
+.mapstage .z2{animation-name:b2}@keyframes b2{0%,28.7%{opacity:0}30.7%,100%{opacity:.55}}
+.mapstage .z3{animation-name:b3}@keyframes b3{0%,29.4%{opacity:0}31.4%,100%{opacity:.55}}
+.mapstage .z4{animation-name:b4}@keyframes b4{0%,30.1%{opacity:0}32.1%,100%{opacity:.55}}
+.mapstage .z5{animation-name:b5}@keyframes b5{0%,30.8%{opacity:0}32.8%,100%{opacity:.55}}
+.mapstage .z6{animation-name:b6}@keyframes b6{0%,31.5%{opacity:0}33.5%,100%{opacity:.55}}
+.mapstage .z7{animation-name:b7}@keyframes b7{0%,32.2%{opacity:0}34.2%,100%{opacity:.55}}
+.mapstage .z8{animation-name:b8}@keyframes b8{0%,32.9%{opacity:0}34.9%,100%{opacity:.55}}
+.mapstage .z9{animation-name:b9}@keyframes b9{0%,33.6%{opacity:0}35.6%,100%{opacity:.55}}
+.mapstage .z10{animation-name:b10}@keyframes b10{0%,34.3%{opacity:0}36.3%,100%{opacity:.55}}
+.mapstage .z11{animation-name:b11}@keyframes b11{0%,35%{opacity:0}37%,100%{opacity:.55}}
+.mapstage .ping{animation:pingk linear both;animation-timeline:--ride;animation-range:contain 0% contain 100%}
+@keyframes pingk{0%,37%{opacity:0}39%,100%{opacity:1}}
+.mapstage .route{stroke-dasharray:20;animation:routek linear both;animation-timeline:--ride;animation-range:contain 0% contain 100%}
+@keyframes routek{0%,44%{stroke-dashoffset:20}47%,100%{stroke-dashoffset:0}}
+.mapstage .dot{animation:dotk linear both;animation-timeline:--ride;animation-range:contain 0% contain 100%}
+@keyframes dotk{0%,47%{transform:none}54%,100%{transform:translate(-11.4px,8.3px)}}
+.stations li{opacity:.3;animation:linear both;animation-timeline:--ride;animation-range:contain 0% contain 100%}
+.stations .st1{animation-name:s1}@keyframes s1{0%,44%{opacity:.3}45%,100%{opacity:1}}
+.stations .st2{animation-name:s2}@keyframes s2{0%,46%{opacity:.3}47%,100%{opacity:1}}
+.stations .st3{animation-name:s3}@keyframes s3{0%,48%{opacity:.3}49%,100%{opacity:1}}
+.stations .st4{animation-name:s4}@keyframes s4{0%,50%{opacity:.3}54%,100%{opacity:1}}
+.f2{top:calc(var(--top) + min(92vw,46svh) + 8px);height:calc(100svh - var(--top) - min(92vw,46svh) - 8px);padding-top:0}
+.f2 .body{display:none}
+.f2 .wash{padding:16px 0 0}.f2 .wash::before{display:none}
+.heroln{display:block;overflow:hidden;padding-bottom:.08em;margin-bottom:-.08em}
+.heroln>span{display:block;animation:lineup 900ms var(--eo) both}
+.heroln+.heroln>span{animation-delay:110ms}
+@keyframes lineup{from{transform:translateY(105%)}}
+@media (min-width:768px){
+.mapstage .map{width:min(46vw,calc(100svh - var(--top) - 32px));left:auto;right:var(--m);margin-left:0;top:calc(var(--top) - 16px)}
+.f2{top:calc(var(--top) - 12px);height:calc(100svh - var(--top) + 12px);padding-top:12px}
+.f2 .body{display:block}
+.f2 .wash{padding:36px 40px 40px}.f2 .wash::before{display:block}
+}
+}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="nav">
+<a class="brand" href="#top">NearCab</a>
+<a class="btn" href="#f4">Join the waitlist</a>
+</header>
+
+<main class="ride" id="top">
+<div class="stage">
+
+<div class="band" aria-hidden="true">
+<div class="world"><img src="img/dusk-back.webp" alt=""><img src="img/garage-back.webp" alt=""><img src="img/night-back.webp" alt=""></div>
+<div class="near"><img src="img/dusk-front.webp" alt=""><img src="img/garage-front.webp" alt=""><img src="img/night-front.webp" alt=""></div>
+<div class="road"></div>
+<div class="cab"><span class="lamp"></span><span class="brake"></span><span class="puff"></span><span class="puff"></span><span class="puff"></span><img class="body" src="img/taxi-side.webp" alt=""><img class="wheel w1" src="img/wheel.webp" alt=""><img class="wheel w2" src="img/wheel.webp" alt=""></div>
+</div>
+
+<div class="mapstage" aria-hidden="true">
+<div class="map">
+<img src="img/map-streets.webp" alt="">
+<svg viewBox="0 0 100 100" preserveAspectRatio="none">
+<defs><filter id="wc" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".09" numOctaves="3" seed="7"/><feDisplacementMap in="SourceGraphic" scale="2.2"/><feGaussianBlur stdDeviation=".35"/></filter></defs>
+<g filter="url(#wc)">
+<path class="zone z1" fill="#F7E2A4" d="M0.0 0.0 L51.1 0.0 L36.5 32.2 L0.0 37.8 Z"/>
+<path class="zone z2" fill="#F4C7BE" d="M51.1 0.0 L89.7 0.0 L48.0 48.7 L47.0 48.2 L36.5 32.2 Z"/>
+<path class="zone z3" fill="#FCCF5D" d="M89.7 0.0 L100.0 0.0 L100.0 32.1 L97.4 35.0 L52.5 53.0 L48.0 48.7 Z"/>
+<path class="zone z4" fill="#C9D6DC" d="M0.0 80.0 L0.0 37.8 L36.5 32.2 L47.0 48.2 Z"/>
+<path class="zone z5" fill="#EBD9BF" d="M53.9 57.8 L52.5 53.0 L97.4 35.0 L80.6 68.9 L79.2 69.9 Z"/>
+<path class="zone z6" fill="#CAD2C2" d="M16.2 100.0 L0.0 100.0 L0.0 80.0 L47.0 48.2 L48.0 48.7 L52.5 53.0 L53.9 57.8 L46.6 81.8 Z"/>
+<path class="zone z7" fill="#F4C7BE" d="M100.0 32.1 L100.0 80.5 L80.6 68.9 L97.4 35.0 Z"/>
+<path class="zone z8" fill="#F7E2A4" d="M46.6 81.8 L53.9 57.8 L79.2 69.9 L74.7 79.9 L66.2 84.9 Z"/>
+<path class="zone z9" fill="#C9D6DC" d="M100.0 80.5 L100.0 100.0 L92.0 100.0 L74.7 79.9 L79.2 69.9 L80.6 68.9 Z"/>
+<path class="zone z10" fill="#EBD9BF" d="M92.0 100.0 L67.7 100.0 L66.2 84.9 L74.7 79.9 Z"/>
+<path class="zone z11" fill="#FBE7E2" d="M67.7 100.0 L16.2 100.0 L46.6 81.8 L66.2 84.9 Z"/>
+</g>
+<circle class="ping" cx="51.9" cy="47.3" r="2"/>
+<path class="route" d="M63.3 39.0 L57.6 43.2 L51.9 47.3"/>
+<circle class="dot" cx="63.3" cy="39.0" r="1.4"/>
+</svg>
+</div>
+</div>
+
+<section class="frame f0" aria-label="Pickup">
+<div class="grid">
+<h1 class="display"><span class="heroln"><span>The nearest</span></span><span class="heroln"><span><img class="cabword" src="img/taxi-side.webp" alt="a painted yellow taxi"> answers.</span></span></h1>
+<p class="lead">A dispatch system that splits your city into zones, one per free cab, so every call goes to the car closest to the door.</p>
+<p class="act"><a class="btn" href="#f4">Join the waitlist</a></p>
+</div>
+</section>
+
+<section class="frame f1" id="f1" aria-label="Stop 1, the call">
+<div class="grid">
+<p class="display">A phone<br>rings.</p>
+<div class="card wash blush">
+<p class="label rule">Stop 1 · The call</p>
+<h2 class="head" style="margin-top:16px">24 cabs are free.</h2>
+<p class="lead">The dispatcher has seconds to pick one.</p>
+<p class="body">The usual answer is a radio round: ask who is close, wait, guess. The wrong guess costs a cab driving empty across town and a caller watching the clock.</p>
+<img class="phone" src="img/phone.webp" alt="">
+</div>
+</div>
+</section>
+
+<section class="frame f2" id="f2" aria-label="Stop 2, above the city">
+<div class="grid">
+<div class="card wash river">
+<p class="label rule">Stop 2 · Above the city</p>
+<div class="parts">
+<div class="part pa">
+<h2 class="head" style="margin-top:16px">Every cab owns a patch of the city</h2>
+<p class="lead">Each zone holds the streets closer to its cab than to any other.</p>
+<p class="body">A call is answered by finding the zone it falls in, not by measuring the distance to every car.</p>
+<p class="label" style="margin-top:16px">Eleven cabs, eleven zones. The red pin is the caller.</p>
+</div>
+<div class="part pb">
+<h2 class="head" style="margin-top:16px">From call to curb</h2>
+<p class="lead">The slow part is the drive. Everything before it takes seconds.</p>
+<ol class="stations">
+<li class="st1"><b>2 seconds</b><span>The call and the address are logged.</span></li>
+<li class="st2"><b>Instantly</b><span>The address lands in one zone.</span></li>
+<li class="st3"><b>5 seconds</b><span>That zone's driver accepts.</span></li>
+<li class="st4"><b>4 minutes</b><span>The cab takes the short way to the door.</span></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="restmap"><img src="img/map-streets.webp" alt="a painted city map from above with small taxis and a red pin"></div>
+</div>
+</section>
+
+<section class="frame f3" id="f3" aria-label="Stop 3, the garage">
+<div class="grid">
+<p class="label rule">Stop 3 · The garage</p>
+<h2 class="head">What exists today</h2>
+<p class="lead">A working prototype, built in Python in January 2026 and open to read.</p>
+<ol class="index">
+<li><h3>Built: the zone map</h3><p>24 cabs and 12 callers over a real city map.</p></li>
+<li><h3>Built: the search</h3><p>One query finds the closest cab for every caller at once.</p></li>
+<li class="later"><img class="drop" src="img/drop-blush.webp" alt=""><h3>Next: a queue</h3><p>So one cab never wins two calls. Later: live status, real roads, traffic.</p></li>
+</ol>
+<p class="more label"><a href="https://github.com/Rudic21302/VoronojTaxi">Read how the prototype works</a></p>
+</div>
+</section>
+
+<section class="frame f4" id="f4" aria-label="Stop 4, your door">
+<form class="grid" onsubmit="event.preventDefault()">
+<p class="label rule" style="grid-column:1/-1;margin-bottom:20px">Stop 4 · Your door</p>
+<h2 class="display">Tell me when it runs.</h2>
+<p class="lead">One email when NearCab takes its first real call.</p>
+<div class="form"><label for="email">Your email</label><input id="email" type="email" placeholder="you@example.com" autocomplete="email"><button type="submit">Okay</button></div>
+<label class="consent wash cabwash"><input type="checkbox" required> <span>I agree to the <a href="#">Terms of Service</a> and the <a href="#">Privacy Policy</a>.</span></label>
+<p class="note">NearCab isn't software yet. Connect this form to your own mailing list before you publish it.</p>
+</form>
+</section>
+
+<section class="frame f5" aria-label="End of the line">
+<div class="grid">
+<p class="label rule">End of the line</p>
+<a class="big" href="#top">NearCab</a>
+<p class="body">NearCab is a design study for a product that does not exist yet. Based on the Voronoi Taxi prototype, 2026.</p>
+<div class="card wash blush"><div class="fine label"><span>Design mockup. The software is not built.</span><span>Paintings made with an image model, art-directed by hand.</span><span>2026</span></div></div>
+</div>
+</section>
+
+</div>
+</main>
+<script>
+(function(){
+  function measure(){
+    document.querySelectorAll('.frame').forEach(function(f){
+      var g=f.firstElementChild; if(!g) return;
+      var room=f.clientHeight-parseFloat(getComputedStyle(f).paddingTop)-24;
+      f.style.setProperty('--over',Math.max(0,g.scrollHeight-room)+'px');
+    });
+  }
+  addEventListener('load',measure); addEventListener('resize',measure); document.fonts&&document.fonts.ready.then(measure);
+})();
+</script>
+
+<script>
+/* sky state: on between 24% and 57% of the ride; it only switches after a safety margin is crossed,
+   and once switched the lift (or drop) plays out in time, in either scroll direction */
+(function(){
+  var stage=document.querySelector('.stage'), ride=document.querySelector('.ride'); if(!stage||!CSS.supports('animation-timeline','view()')) return;
+  var IN=[.24,.565], OUT=[.215,.59], sky=false;
+  function tick(){
+    var r=ride.getBoundingClientRect(), p=Math.min(1,Math.max(0,-r.top/(r.height-innerHeight)));
+    var next = sky ? !(p<OUT[0]||p>OUT[1]) : (p>=IN[0]&&p<=IN[1]);
+    if(next!==sky){ sky=next; stage.classList.toggle('is-sky',sky); }
+  }
+  var still; addEventListener('scroll',function(){requestAnimationFrame(tick); stage.classList.add('is-moving'); clearTimeout(still); still=setTimeout(function(){stage.classList.remove('is-moving')},120);},{passive:true}); tick();
+})();
+</script>
+</body>
+</html>

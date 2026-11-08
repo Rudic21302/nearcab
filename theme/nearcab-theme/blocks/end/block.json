@@ -1,0 +1,49 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "nearcab/end",
+  "title": "NearCab End (F5)",
+  "category": "theme",
+  "description": "End of the line: a giant link back to the start, a short body and the fine print in a washed card.",
+  "textdomain": "nearcab",
+  "parent": [
+    "nearcab/ride"
+  ],
+  "attributes": {
+    "frameLabel": {
+      "type": "string",
+      "default": "End of the line"
+    },
+    "label": {
+      "type": "string",
+      "default": "End of the line"
+    },
+    "bigLabel": {
+      "type": "string",
+      "default": "NearCab"
+    },
+    "bigHref": {
+      "type": "string",
+      "default": "#top"
+    },
+    "body": {
+      "type": "string",
+      "default": "NearCab is a design study for a product that does not exist yet. Based on the Voronoi Taxi prototype, 2026."
+    },
+    "fine": {
+      "type": "array",
+      "default": [
+        "Design mockup. The software is not built.",
+        "Paintings made with an image model, art-directed by hand.",
+        "2026"
+      ]
+    }
+  },
+  "supports": {
+    "html": false,
+    "reusable": false
+  },
+  "editorScript": "nearcab-end-editor",
+  "style": "nearcab-end-style",
+  "render": "file:./render.php"
+}

@@ -1,0 +1,3 @@
+import{r as e}from"./register-labels-block-D0SfX7_X.js";const t="nearcab/call",a={frameLabel:{type:"string",default:"Stop 1, the call"},statementLines:{type:"string",default:`A phone
+rings.`},label:{type:"string",default:"Stop 1 · The call"},heading:{type:"string",default:"24 cabs are free."},lead:{type:"string",default:"The dispatcher has seconds to pick one."},body:{type:"string",default:"The usual answer is a radio round: ask who is close, wait, guess. The wrong guess costs a cab driving empty across town and a caller watching the clock."}},s={name:t,attributes:a};e(s);
+//# sourceMappingURL=call-editor-DK0IzY3A.js.map

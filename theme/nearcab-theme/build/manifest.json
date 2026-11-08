@@ -1,0 +1,160 @@
+{
+  "_register-labels-block-D0SfX7_X.js": {
+    "file": "assets/register-labels-block-D0SfX7_X.js",
+    "name": "register-labels-block"
+  },
+  "assets/nearcab/wash-blush.webp": {
+    "file": "assets/wash-blush-C7mowtkg.webp",
+    "src": "assets/nearcab/wash-blush.webp"
+  },
+  "assets/nearcab/wash-cab.webp": {
+    "file": "assets/wash-cab-B_pPOqrQ.webp",
+    "src": "assets/nearcab/wash-cab.webp"
+  },
+  "assets/nearcab/wash-header.webp": {
+    "file": "assets/wash-header-BDFNHowD.webp",
+    "src": "assets/nearcab/wash-header.webp"
+  },
+  "assets/nearcab/wash-river.webp": {
+    "file": "assets/wash-river-CeUxGxL_.webp",
+    "src": "assets/nearcab/wash-river.webp"
+  },
+  "blocks/call/edit.jsx": {
+    "file": "assets/call-editor-DK0IzY3A.js",
+    "name": "call-editor",
+    "src": "blocks/call/edit.jsx",
+    "isEntry": true,
+    "imports": [
+      "_register-labels-block-D0SfX7_X.js"
+    ]
+  },
+  "blocks/call/style.scss": {
+    "file": "assets/call-style-lNnCiQpW.css",
+    "src": "blocks/call/style.scss",
+    "isEntry": true,
+    "name": "call-style",
+    "names": [
+      "call-style.css"
+    ]
+  },
+  "blocks/door/edit.jsx": {
+    "file": "assets/door-editor-DrfI9Fts.js",
+    "name": "door-editor",
+    "src": "blocks/door/edit.jsx",
+    "isEntry": true,
+    "imports": [
+      "_register-labels-block-D0SfX7_X.js"
+    ]
+  },
+  "blocks/door/style.scss": {
+    "file": "assets/door-style-CNuY99uV.css",
+    "src": "blocks/door/style.scss",
+    "isEntry": true,
+    "name": "door-style",
+    "names": [
+      "door-style.css"
+    ]
+  },
+  "blocks/end/edit.jsx": {
+    "file": "assets/end-editor-rXPeljZG.js",
+    "name": "end-editor",
+    "src": "blocks/end/edit.jsx",
+    "isEntry": true,
+    "imports": [
+      "_register-labels-block-D0SfX7_X.js"
+    ]
+  },
+  "blocks/end/style.scss": {
+    "file": "assets/end-style-3p_ZcEFp.css",
+    "src": "blocks/end/style.scss",
+    "isEntry": true,
+    "name": "end-style",
+    "names": [
+      "end-style.css"
+    ]
+  },
+  "blocks/garage/edit.jsx": {
+    "file": "assets/garage-editor-CbElDNzK.js",
+    "name": "garage-editor",
+    "src": "blocks/garage/edit.jsx",
+    "isEntry": true,
+    "imports": [
+      "_register-labels-block-D0SfX7_X.js"
+    ]
+  },
+  "blocks/garage/style.scss": {
+    "file": "assets/garage-style-DCxskZwR.css",
+    "src": "blocks/garage/style.scss",
+    "isEntry": true,
+    "name": "garage-style",
+    "names": [
+      "garage-style.css"
+    ]
+  },
+  "blocks/pickup/edit.jsx": {
+    "file": "assets/pickup-editor-C8qqa7ir.js",
+    "name": "pickup-editor",
+    "src": "blocks/pickup/edit.jsx",
+    "isEntry": true,
+    "imports": [
+      "_register-labels-block-D0SfX7_X.js"
+    ]
+  },
+  "blocks/pickup/style.scss": {
+    "file": "assets/pickup-style-D1cqlDio.css",
+    "src": "blocks/pickup/style.scss",
+    "isEntry": true,
+    "name": "pickup-style",
+    "names": [
+      "pickup-style.css"
+    ]
+  },
+  "blocks/ride/edit.jsx": {
+    "file": "assets/ride-editor-CADrF34T.js",
+    "name": "ride-editor",
+    "src": "blocks/ride/edit.jsx",
+    "isEntry": true
+  },
+  "blocks/ride/style.scss": {
+    "file": "assets/ride-style-p-7pIL34.css",
+    "src": "blocks/ride/style.scss",
+    "isEntry": true,
+    "name": "ride-style",
+    "names": [
+      "ride-style.css"
+    ]
+  },
+  "blocks/ride/view.js": {
+    "file": "assets/ride-view-Dl9hDY_y.js",
+    "name": "ride-view",
+    "src": "blocks/ride/view.js",
+    "isEntry": true
+  },
+  "blocks/sky/edit.jsx": {
+    "file": "assets/sky-editor-Cc6VA0Dj.js",
+    "name": "sky-editor",
+    "src": "blocks/sky/edit.jsx",
+    "isEntry": true,
+    "imports": [
+      "_register-labels-block-D0SfX7_X.js"
+    ]
+  },
+  "blocks/sky/style.scss": {
+    "file": "assets/sky-style-Cd_oknks.css",
+    "src": "blocks/sky/style.scss",
+    "isEntry": true,
+    "name": "sky-style",
+    "names": [
+      "sky-style.css"
+    ]
+  },
+  "src/main.js": {
+    "file": "assets/main-BZP8pbxP.js",
+    "name": "main",
+    "src": "src/main.js",
+    "isEntry": true,
+    "css": [
+      "assets/main-DpUZZuk_.css"
+    ]
+  }
+}

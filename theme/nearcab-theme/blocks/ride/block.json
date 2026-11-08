@@ -1,0 +1,32 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "nearcab/ride",
+  "title": "NearCab Ride",
+  "category": "theme",
+  "description": "NearCab design study: one pinned stage driven by the page scroll (header, painted street with the cab, the map from above). Holds the six NearCab frames in order; each frame is one stop of the ride.",
+  "textdomain": "nearcab",
+  "allowedBlocks": [
+    "nearcab/pickup",
+    "nearcab/call",
+    "nearcab/sky",
+    "nearcab/garage",
+    "nearcab/door",
+    "nearcab/end"
+  ],
+  "attributes": {
+    "brand": { "type": "string", "default": "NearCab" },
+    "brandHref": { "type": "string", "default": "#top" },
+    "ctaLabel": { "type": "string", "default": "Join the waitlist" },
+    "ctaHref": { "type": "string", "default": "#f4" },
+    "navLabel": { "type": "string", "default": "NearCab" }
+  },
+  "supports": {
+    "html": false,
+    "interactivity": true
+  },
+  "editorScript": "nearcab-ride-editor",
+  "style": "nearcab-ride-style",
+  "viewScriptModule": "nearcab-ride-view",
+  "render": "file:./render.php"
+}

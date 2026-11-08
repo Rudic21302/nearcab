@@ -1,0 +1,65 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "nearcab/garage",
+  "title": "NearCab Garage (F3)",
+  "category": "theme",
+  "description": "Stop 3: what exists today. Heading and lead left, an index of built and next items right, a link to the prototype.",
+  "textdomain": "nearcab",
+  "parent": [
+    "nearcab/ride"
+  ],
+  "attributes": {
+    "frameLabel": {
+      "type": "string",
+      "default": "Stop 3, the garage"
+    },
+    "label": {
+      "type": "string",
+      "default": "Stop 3 · The garage"
+    },
+    "heading": {
+      "type": "string",
+      "default": "What exists today"
+    },
+    "lead": {
+      "type": "string",
+      "default": "A working prototype, built in Python in January 2026 and open to read."
+    },
+    "items": {
+      "type": "array",
+      "default": [
+        {
+          "title": "Built: the zone map",
+          "text": "24 cabs and 12 callers over a real city map.",
+          "later": false
+        },
+        {
+          "title": "Built: the search",
+          "text": "One query finds the closest cab for every caller at once.",
+          "later": false
+        },
+        {
+          "title": "Next: a queue",
+          "text": "So one cab never wins two calls. Later: live status, real roads, traffic.",
+          "later": true
+        }
+      ]
+    },
+    "linkLabel": {
+      "type": "string",
+      "default": "Read how the prototype works"
+    },
+    "linkHref": {
+      "type": "string",
+      "default": "https://github.com/Rudic21302/VoronojTaxi"
+    }
+  },
+  "supports": {
+    "html": false,
+    "reusable": false
+  },
+  "editorScript": "nearcab-garage-editor",
+  "style": "nearcab-garage-style",
+  "render": "file:./render.php"
+}

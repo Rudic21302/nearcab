@@ -1,0 +1,78 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "nearcab/sky",
+  "title": "NearCab Sky (F2)",
+  "category": "theme",
+  "description": "Stop 2, above the city: a washed card next to the zone map. Part A explains the zones, part B (after the route is drawn) lists the four stations from call to curb.",
+  "textdomain": "nearcab",
+  "parent": [
+    "nearcab/ride"
+  ],
+  "attributes": {
+    "frameLabel": {
+      "type": "string",
+      "default": "Stop 2, above the city"
+    },
+    "label": {
+      "type": "string",
+      "default": "Stop 2 · Above the city"
+    },
+    "headingA": {
+      "type": "string",
+      "default": "Every cab owns a patch of the city"
+    },
+    "leadA": {
+      "type": "string",
+      "default": "Each zone holds the streets closer to its cab than to any other."
+    },
+    "bodyA": {
+      "type": "string",
+      "default": "A call is answered by finding the zone it falls in, not by measuring the distance to every car."
+    },
+    "captionA": {
+      "type": "string",
+      "default": "Eleven cabs, eleven zones. The red pin is the caller."
+    },
+    "headingB": {
+      "type": "string",
+      "default": "From call to curb"
+    },
+    "leadB": {
+      "type": "string",
+      "default": "The slow part is the drive. Everything before it takes seconds."
+    },
+    "stations": {
+      "type": "array",
+      "default": [
+        {
+          "time": "2 seconds",
+          "text": "The call and the address are logged."
+        },
+        {
+          "time": "Instantly",
+          "text": "The address lands in one zone."
+        },
+        {
+          "time": "5 seconds",
+          "text": "That zone's driver accepts."
+        },
+        {
+          "time": "4 minutes",
+          "text": "The cab takes the short way to the door."
+        }
+      ]
+    },
+    "mapAlt": {
+      "type": "string",
+      "default": "a painted city map from above with small taxis and a red pin"
+    }
+  },
+  "supports": {
+    "html": false,
+    "reusable": false
+  },
+  "editorScript": "nearcab-sky-editor",
+  "style": "nearcab-sky-style",
+  "render": "file:./render.php"
+}

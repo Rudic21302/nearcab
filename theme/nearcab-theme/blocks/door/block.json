@@ -1,0 +1,81 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "nearcab/door",
+  "title": "NearCab Door (F4)",
+  "category": "theme",
+  "description": "Stop 4: the waitlist. Display heading on the cab-yellow stage, email field and button, required terms consent in a watercolour stain, a note. Posts to the address in formAction.",
+  "textdomain": "nearcab",
+  "parent": [
+    "nearcab/ride"
+  ],
+  "attributes": {
+    "frameLabel": {
+      "type": "string",
+      "default": "Stop 4, your door"
+    },
+    "label": {
+      "type": "string",
+      "default": "Stop 4 · Your door"
+    },
+    "heading": {
+      "type": "string",
+      "default": "Tell me when it runs."
+    },
+    "lead": {
+      "type": "string",
+      "default": "One email when NearCab takes its first real call."
+    },
+    "formAction": {
+      "type": "string",
+      "default": "#"
+    },
+    "emailLabel": {
+      "type": "string",
+      "default": "Your email"
+    },
+    "placeholder": {
+      "type": "string",
+      "default": "you@example.com"
+    },
+    "buttonLabel": {
+      "type": "string",
+      "default": "Okay"
+    },
+    "consentBefore": {
+      "type": "string",
+      "default": "I agree to the"
+    },
+    "termsLabel": {
+      "type": "string",
+      "default": "Terms of Service"
+    },
+    "termsHref": {
+      "type": "string",
+      "default": "#"
+    },
+    "andLabel": {
+      "type": "string",
+      "default": "and the"
+    },
+    "privacyLabel": {
+      "type": "string",
+      "default": "Privacy Policy"
+    },
+    "privacyHref": {
+      "type": "string",
+      "default": "#"
+    },
+    "note": {
+      "type": "string",
+      "default": "NearCab isn't software yet. Connect this form to your own mailing list before you publish it."
+    }
+  },
+  "supports": {
+    "html": false,
+    "reusable": false
+  },
+  "editorScript": "nearcab-door-editor",
+  "style": "nearcab-door-style",
+  "render": "file:./render.php"
+}

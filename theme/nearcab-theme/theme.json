@@ -1,0 +1,163 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"settings": {
+		"color": {
+			"custom": false,
+			"customGradient": false,
+			"customDuotone": false,
+			"defaultPalette": false,
+			"defaultGradients": false,
+			"palette": [
+				{
+					"slug": "nearcab-paper",
+					"name": "NearCab paper",
+					"color": "#FDFAF7"
+				},
+				{
+					"slug": "nearcab-ink",
+					"name": "NearCab ink",
+					"color": "#1C1A19"
+				},
+				{
+					"slug": "nearcab-soft",
+					"name": "NearCab soft",
+					"color": "#55524F"
+				},
+				{
+					"slug": "nearcab-cab",
+					"name": "NearCab cab",
+					"color": "#FCCF5D"
+				},
+				{
+					"slug": "nearcab-cab-deep",
+					"name": "NearCab cab deep",
+					"color": "#E2A93B"
+				},
+				{
+					"slug": "nearcab-blush",
+					"name": "NearCab blush",
+					"color": "#FBE7E2"
+				},
+				{
+					"slug": "nearcab-river",
+					"name": "NearCab river",
+					"color": "#E2E8EB"
+				},
+				{
+					"slug": "nearcab-road",
+					"name": "NearCab road",
+					"color": "#EFE9E2"
+				}
+			]
+		},
+		"typography": {
+			"customFontSize": false,
+			"fontFamilies": [
+				{
+					"slug": "nearcab-display",
+					"name": "NearCab display (Libre Franklin)",
+					"fontFamily": "'Libre Franklin', Arial, sans-serif",
+					"fontFace": [
+						{
+							"fontFamily": "Libre Franklin",
+							"fontStyle": "normal",
+							"fontWeight": "700",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/fonts/libre-franklin-700-ext.woff2"
+							],
+							"unicodeRange": "U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF"
+						},
+						{
+							"fontFamily": "Libre Franklin",
+							"fontStyle": "normal",
+							"fontWeight": "700",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/fonts/libre-franklin-700.woff2"
+							],
+							"unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD"
+						}
+					]
+				},
+				{
+					"slug": "nearcab-text",
+					"name": "NearCab text (Literata)",
+					"fontFamily": "'Literata', Georgia, serif",
+					"fontFace": [
+						{
+							"fontFamily": "Literata",
+							"fontStyle": "italic",
+							"fontWeight": "400",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/fonts/literata-italic-ext.woff2"
+							],
+							"unicodeRange": "U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF"
+						},
+						{
+							"fontFamily": "Literata",
+							"fontStyle": "italic",
+							"fontWeight": "400",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/fonts/literata-italic.woff2"
+							],
+							"unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD"
+						},
+						{
+							"fontFamily": "Literata",
+							"fontStyle": "normal",
+							"fontWeight": "400 600",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/fonts/literata-ext.woff2"
+							],
+							"unicodeRange": "U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF"
+						},
+						{
+							"fontFamily": "Literata",
+							"fontStyle": "normal",
+							"fontWeight": "400 600",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/fonts/literata.woff2"
+							],
+							"unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD"
+						}
+					]
+				}
+			]
+		},
+		"custom": {
+			"nearcab": {
+				"placeholder": "#7C716B",
+				"ping": "#BE4A4B",
+				"puff": "#D9D4CF",
+				"lamp": "#FFE9A8",
+				"brake": "#E0483E",
+				"zone-sun": "#F7E2A4",
+				"zone-rose": "#F4C7BE",
+				"zone-cab": "#FCCF5D",
+				"zone-river": "#C9D6DC",
+				"zone-sand": "#EBD9BF",
+				"zone-sage": "#CAD2C2",
+				"zone-blush": "#FBE7E2"
+			}
+		},
+		"layout": {
+			"contentSize": "780px",
+			"wideSize": "1440px"
+		}
+	},
+	"styles": {
+		"color": {
+			"background": "var(--wp--preset--color--nearcab-paper)",
+			"text": "var(--wp--preset--color--nearcab-ink)"
+		},
+		"typography": {
+			"fontFamily": "var(--wp--preset--font-family--nearcab-text)"
+		}
+	}
+}

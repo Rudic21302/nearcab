@@ -1,0 +1,77 @@
+// NearCab Call (F1): statement left, washed card right with the phone. Visible 12.5-20% of the ride.
+// Ported 1:1 from truth/design/ride-test/index.html; shared look and the stage are in the ride block.
+// Frame selectors are .frame.fN so they beat the ride's .frame rules whatever order the block styles load in.
+
+.nearcab {
+	.frame.f1 .display {
+		grid-column: 1/-1;
+	}
+
+	.frame.f1 .card {
+		grid-column: 1/-1;
+		margin-top: 28px;
+	}
+
+	.frame.f1 .card .lead,
+	.frame.f1 .card .body {
+		margin-top: 12px;
+	}
+
+	.frame.f1 .phone {
+		display: none;
+	}
+
+	@media (min-width: 768px) {
+		.frame.f1 .display {
+			grid-column: 1/8;
+			align-self: start;
+		}
+
+		.frame.f1 .card {
+			grid-column: 8/-1;
+			margin-top: 0;
+			align-self: start;
+		}
+
+		.frame.f1 .phone {
+			display: block;
+			position: absolute;
+			width: clamp(100px, 8.5vw, 150px);
+			right: 2%;
+			bottom: -18%;
+			rotate: 8deg;
+		}
+	}
+
+	@supports (animation-timeline: view()) and (animation-range: contain 0% contain 100%) {
+		@media (prefers-reduced-motion: no-preference) {
+			.frame.f1 {
+				animation-name: k1;
+			}
+
+			@keyframes k1 {
+				0%, 10% { opacity: 0; transform: translateY(24px); }
+				12.5%, 20% { opacity: 1; transform: none; }
+				23%, 100% { opacity: 0; transform: translateY(-24px); }
+			}
+
+			.frame.f1 .wash::before {
+				animation-name: w1;
+			}
+
+			@keyframes w1 {
+				0%, 10% { transform: scale(.6); opacity: 0; }
+				14%, 100% { transform: none; opacity: .62; }
+			}
+
+			.frame.f1 > .grid {
+				animation-name: r1;
+			}
+
+			@keyframes r1 {
+				0%, 13% { transform: none; }
+				19.5%, 100% { transform: translateY(calc(var(--over, 0px) * -1)); }
+			}
+		}
+	}
+}

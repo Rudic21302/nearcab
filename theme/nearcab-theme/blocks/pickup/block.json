@@ -1,0 +1,49 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "nearcab/pickup",
+  "title": "NearCab Pickup (F0)",
+  "category": "theme",
+  "description": "First stop: the big hello. Two display lines with the painted cab before line two, the lead and the waitlist button.",
+  "textdomain": "nearcab",
+  "parent": [
+    "nearcab/ride"
+  ],
+  "attributes": {
+    "frameLabel": {
+      "type": "string",
+      "default": "Pickup"
+    },
+    "lineOne": {
+      "type": "string",
+      "default": "The nearest"
+    },
+    "lineTwo": {
+      "type": "string",
+      "default": "answers."
+    },
+    "cabAlt": {
+      "type": "string",
+      "default": "a painted yellow taxi"
+    },
+    "lead": {
+      "type": "string",
+      "default": "A dispatch system that splits your city into zones, one per free cab, so every call goes to the car closest to the door."
+    },
+    "ctaLabel": {
+      "type": "string",
+      "default": "Join the waitlist"
+    },
+    "ctaHref": {
+      "type": "string",
+      "default": "#f4"
+    }
+  },
+  "supports": {
+    "html": false,
+    "reusable": false
+  },
+  "editorScript": "nearcab-pickup-editor",
+  "style": "nearcab-pickup-style",
+  "render": "file:./render.php"
+}

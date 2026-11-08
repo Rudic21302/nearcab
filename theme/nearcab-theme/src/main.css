@@ -1,0 +1,33 @@
+@import "tailwindcss" source("../blocks");
+
+/* theme.json auto-emits every palette/font entry as --wp--preset--* custom properties; Tailwind reads them from here. */
+@theme inline {
+	--color-nearcab-paper: var(--wp--preset--color--nearcab-paper);
+	--color-nearcab-ink: var(--wp--preset--color--nearcab-ink);
+	--color-nearcab-soft: var(--wp--preset--color--nearcab-soft);
+	--color-nearcab-cab: var(--wp--preset--color--nearcab-cab);
+	--color-nearcab-cab-deep: var(--wp--preset--color--nearcab-cab-deep);
+	--color-nearcab-blush: var(--wp--preset--color--nearcab-blush);
+	--color-nearcab-river: var(--wp--preset--color--nearcab-river);
+	--color-nearcab-road: var(--wp--preset--color--nearcab-road);
+
+	--font-nearcab-display: var(--wp--preset--font-family--nearcab-display);
+	--font-nearcab-text: var(--wp--preset--font-family--nearcab-text);
+}
+
+/* A word longer than its line (big titles, URLs on 320px phones) breaks instead of running past the gutter. */
+body {
+	overflow-wrap: break-word;
+}
+
+h1,
+h2 {
+	hyphens: auto;
+}
+
+@media (min-width: 768px) {
+	h1,
+	h2 {
+		hyphens: manual;
+	}
+}

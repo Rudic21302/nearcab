@@ -1,0 +1,1 @@
+{"version":3,"file":"garage-editor-CbElDNzK.js","sources":["../../blocks/garage/edit.jsx"],"sourcesContent":["import registerLabelsBlock from '../_shared/register-labels-block.jsx';\nimport metadata from './block.json';\n\nregisterLabelsBlock( metadata );\n"],"names":["registerLabelsBlock","metadata"],"mappings":"m1BAGAA,EAAAC,CAAA"}
