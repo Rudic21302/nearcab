@@ -4,7 +4,7 @@ A waitlist page for a taxi dispatch product that does not exist, painted in wate
 
 This repo holds the finished theme and the knowledge base it was built from, so you can rebuild the page yourself.
 
-The story behind it: [What Claude can ship in 24 hours](https://jovanrudic.com/blog/what-claude-can-ship-in-24-hours/)
+The story behind it: [What Claude can deliver in 24 hours](https://jovanrudic.com/blog/what-claude-can-deliver-in-24-hours/)
 
 ## Build it yourself
 
